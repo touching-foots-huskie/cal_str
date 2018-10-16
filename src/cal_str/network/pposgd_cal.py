@@ -158,7 +158,7 @@ def learn(config, env, policy_fn, *,
         while True:
             if callback: callback(locals(), globals())
             # watch model every 10 iterations
-            if iters_so_far % 10 == 0:
+            if iters_so_far % 30 == 0:
                 show_model(pi, env, stochastic=True)
             if max_timesteps and timesteps_so_far >= max_timesteps:
                 break
@@ -246,15 +246,12 @@ def flatten_lists(listoflists):
 
 
 # exam result
-def show_model(pi, env, stochastic, tmax=3):
-    t = 0
+def show_model(pi, env, stochastic):
+    new = False
     ob = env.reset()
-    env.render()
-
-    while t<tmax:
+    while not new:
         ac, vpred = pi.act(stochastic, ob)
         ob, rew, new, _ = env.step(ac)
-        env.render()
-        if new:
-            ob = env.reset()
-            t+= 1
+    # render after all
+    env.render()
+    env.reset()

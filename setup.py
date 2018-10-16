@@ -8,6 +8,7 @@ setup(
         'cal_str' :
         [
         'envs/assets/*.xml',
+        'envs/assets/*.mat',
         ]
     },
 )

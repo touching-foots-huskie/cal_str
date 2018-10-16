@@ -1,4 +1,5 @@
 import os
+import pdb
 import numpy as np
 from gym import utils
 from gym.envs.mujoco import mujoco_env
@@ -11,6 +12,7 @@ class BallEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         self.concerned_geom = ['target']
         # mujoco structure
         file_path = os.path.join(os.path.dirname(__file__), 'assets', 'ball.xml')
+        pdb.set_trace()
         mujoco_env.MujocoEnv.__init__(self, file_path, 5)
         utils.EzPickle.__init__(self)
 
@@ -93,3 +95,7 @@ class DynamicDict:
 
     def values(self):
         return self.value_list
+
+
+if __name__ == "__main__":
+    env = BallEnv()

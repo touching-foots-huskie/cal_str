@@ -3,16 +3,15 @@ import cal_str
 import mujoco_py
 from mpi4py import MPI
 from baselines import logger
+from baselines.bench import Monitor
 from baselines.common import tf_util as U
 from baselines.common import set_global_seeds
 from cal_str.network import cal_policy, pposgd_cal
 from cal_str.network.knowledge import knowledge_dict
 from cal_str.network.knowledge import network_config
 
-from baselines.bench import Monitor
 
-# get environment:
-def make_mujoco_env(env_id, seed, reward_scale=1.0):
+def make_env(env_id, seed, reward_scale=1.0):
     '''
     Create a wrapped, monitered gym.Env for MuJoCo
     '''
@@ -28,13 +27,14 @@ def make_mujoco_env(env_id, seed, reward_scale=1.0):
         env = RewardScaler(env, reward_scale)
     return env 
 
+
 def train(config, env_id, num_timesteps, seed):
     U.make_session(num_cpu=1).__enter__()
 
     def policy_fn(name, config, ob_space, ac_space):
         return cal_policy.CalPolicy(name=name, config=config, ob_space=ob_space, ac_space=ac_space)
 
-    env = make_mujoco_env(env_id, seed)
+    env = make_env(env_id, seed)
     pposgd_cal.learn(config, env, policy_fn,
             max_timesteps=num_timesteps,
             timesteps_per_actorbatch=2048,
@@ -51,15 +51,15 @@ def gen_config():
     config['run_type'] = 'train'
     config['continue'] = False
     # construction configuration:
-    config['env_type'] = 'reacher'
-    config['update_name'] = 'reacher'
+    # driver problem
+    config['env_type'] = 'driver'
+    config['update_name'] = 'driver'
     # network config:
     network_config(config)
     return config
 
 
 def main():
-    logger.configure()
     config = gen_config()
     train(config, config['environment'], num_timesteps=1e6, seed=0)
 

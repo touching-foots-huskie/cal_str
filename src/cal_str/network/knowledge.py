@@ -24,6 +24,12 @@ knowledge_dict['map_list']['reacher'] = [[i for i in range(11)]]  # ob mapping
 knowledge_dict['action_dim']['reacher'] = [2, 2]  # ai, ..., all
 knowledge_dict['action_map']['reacher'] = [[0, 1]]  # action mapping
 
+# driver
+knowledge_dict['environment']['driver'] = 'Driv-v0'
+knowledge_dict['map_list']['driver'] = [[i for i in range(7)]] # ob mapping
+knowledge_dict['action_dim']['driver'] = [2, 2] # a1, all_dim
+knowledge_dict['action_map']['driver'] = [[0, 1]] # action mapping
+
 
 def network_config(config):
     # index:
